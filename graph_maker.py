@@ -91,4 +91,4 @@ class projGraph():
 if __name__ == "__main__":
     bobby = projGraph()
     f = plt.figure()
-    bobby.makeGraph(f,40,72,95.9,73.8)
+    bobby.makeGraph(f,40,72,95.9,73.8,100)
