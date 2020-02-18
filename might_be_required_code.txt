@@ -1,0 +1,87 @@
+if StudentData == None:
+            return False
+
+        else:
+            message2User.config(text="", bg="SystemButtonFace")
+            if password == StudentData[1]:
+                return True
+            else:
+                message2User.config(text="Incorrect Password!", bg="#ff6666")
+                return False
+
+##########################################
+
+if TeacherData == None:
+            message2User.config(text="Incorrect Username!", bg="#ff6666")
+
+        else:
+            message2User.config(text="", bg="SystemButtonFace")
+            if password == TeacherData[1]:
+                return True
+            else:
+                message2User.config(text="Incorrect Password!", bg="#ff6666")
+                return False
+
+############################################
+
+studentValid = database_mech.StudentLoginCheck(userInput,passInput,message2User)
+        if studentValid == False:
+            adminValid = database_mech.AdminLoginCheck(userInput,passInput,message2User)
+
+#############################################
+
+##### LINE 444
+
+def viewStudents(self,desert):
+
+        viewStudent = Toplevel(desert)
+        viewStudent.grab_set()
+        viewStudent.geometry("522x300")
+
+        studentDataBox = extra.Treeview(viewStudent)
+        studentDataBox["columns"] = ("First Name","Last Name","Password","Class ID")
+        studentDataBox.heading("#0", text = "Student ID")
+        studentDataBox.column("#0", width = 100)
+        studentDataBox.heading("First Name", text= "First Name")
+        studentDataBox.column("First Name", width = 100)
+        studentDataBox.heading("Last Name", text= "Last Name")
+        studentDataBox.column("Last Name", width = 100)
+        studentDataBox.heading("Password", text= "Password")
+        studentDataBox.column("Password", width = 100)
+        studentDataBox.heading("Class ID", text = "Class ID")
+        studentDataBox.column("Class ID", width = 100)
+
+        scrollyStudent = extra.Scrollbar(viewStudent, orient = "vertical")
+        scrollyStudent.config(command = studentDataBox.yview)
+
+        StudentData = self.database_mech.allStudentData()
+
+        for StudentItem in StudentData:
+            studentDataBox.insert("", "end", text = StudentItem[0], values = (StudentItem[1],StudentItem[2],StudentItem[4],StudentItem[3]))
+        studentDataBox.grid(row=1,column=0,columnspan=3)
+
+        studentDataBox.config(yscrollcommand = scrollyStudent.set)
+        scrollyStudent.grid(row=1,column = 4, sticky = N+S+E)
+
+        Student_Table_Label = Label(viewStudent, text = "Student Data")
+        Student_Table_Label.grid(row=0,column=0)
+
+        DeleteStudent = Button(viewStudent, text = "Delete Student",
+                               command = lambda: self.delSelectedRecord(studentDataBox,"Students","Student_ID"))
+        DeleteStudent.grid(row=0,column=1)
+
+        CloseWindow = Button(viewStudent, text = "Close",
+                             command = lambda: self.cancelEntry(viewStudent))
+        CloseWindow.grid(row=0,column=2)
+
+#######################################
+
+##### LINE 444
+
+def delSelectedStudent(self,StudentDataBox):
+        highlighted = StudentDataBox.focus()
+        focus_data = StudentDataBox.item(highlighted)
+        self.database_mech.delOneStudent(focus_data)
+        StudentDataBox.delete(highlighted)
+
+#######################################
